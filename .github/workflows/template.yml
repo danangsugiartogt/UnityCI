@@ -50,6 +50,7 @@ jobs:
      - uses: webbertakken/unity-test-runner@v2
        id: testRunner
        with:
+         customImage: unityci/editor:ubuntu-2021.3.40f1-linux-il2cpp-3.1.0
          testMode: all
 
      - uses: actions/upload-artifact@v4
