@@ -46,6 +46,11 @@ jobs:
          restore-keys: |
            Library-test-project-
            Library-
+    
+     - name: Activate Unity license
+       uses: game-ci/unity-activate@v2
+       with:
+        unityLicense: ${{ secrets.UNITY_LICENSE }}
 
      - uses: webbertakken/unity-test-runner@v2
        id: testRunner
