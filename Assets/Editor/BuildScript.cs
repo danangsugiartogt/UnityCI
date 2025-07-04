@@ -32,7 +32,7 @@ public static class BuildScript
     {
         // Setup keystore for signing
         PlayerSettings.Android.useCustomKeystore = true;
-        PlayerSettings.Android.keystoreName = "keystore/user.keystore"; // rel. path dari project root
+        PlayerSettings.Android.keystoreName = "keystore/user.keystore"; // rel. path
         PlayerSettings.Android.keystorePass = System.Environment.GetEnvironmentVariable("KEYSTORE_PASS");
         PlayerSettings.Android.keyaliasName = System.Environment.GetEnvironmentVariable("KEY_ALIAS");
         PlayerSettings.Android.keyaliasPass = System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS");

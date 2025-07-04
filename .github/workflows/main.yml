@@ -105,6 +105,12 @@ jobs:
           mkdir -p keystore
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/user.keystore
 
+      - name: 🔍 Debug secrets (temporary)
+        run: |
+          echo "KEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }}"
+          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"
+          echo "KEY_ALIAS_PASS=${{ secrets.KEY_ALIAS_PASS }}"
+
       - name: 📦 Build Android APK
         uses: game-ci/unity-builder@v4
         with:
