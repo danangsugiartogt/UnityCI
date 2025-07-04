@@ -1,7 +1,65 @@
-- uses: game-ci/unity-builder@v4
-  env:
-    UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-    UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-    UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  with:
-    targetPlatform: WebGL
+name: Unity WebGL Build & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    name: 📝 Get Unity Version
+    runs-on: ubuntu-latest
+    outputs:
+      unityVersion: ${{ steps.unity-version.outputs.unityVersion }}
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Read Unity version from ProjectVersion.txt
+        id: unity-version
+        run: |
+          version=$(grep -oP '(?<=m_EditorVersion: ).*' ProjectSettings/ProjectVersion.txt)
+          echo "Unity version detected: $version"
+          echo "unityVersion=$version" >> $GITHUB_OUTPUT
+
+  test:
+    name: 🧪 Run Tests
+    needs: prepare
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧪 Run Unity Test Runner
+        uses: game-ci/unity-test-runner@v4
+        with:
+          unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+          testMode: playmode
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+  build:
+    name: 🌐 Build WebGL
+    needs: [prepare, test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧱 Build WebGL
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: WebGL
+          unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+      - name: 📦 Upload WebGL Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: WebGL-Build
+          path: build/WebGL
