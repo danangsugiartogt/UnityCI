@@ -83,10 +83,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/WebGL
-
     android:
       name: 🌐 Build Android
-      needs: [prepare, test]
+      needs: webgl
       runs-on: ubuntu-latest
 
       steps:
