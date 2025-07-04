@@ -39,7 +39,10 @@ jobs:
           unityVersion: ${{ needs.prepare.outputs.unityVersion }}
           testMode: playmode
         env:
+          env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
   build:
     name: 🌐 Build WebGL
@@ -57,6 +60,8 @@ jobs:
           unityVersion: ${{ needs.prepare.outputs.unityVersion }}
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
       - name: 📦 Upload WebGL Build
         uses: actions/upload-artifact@v4
