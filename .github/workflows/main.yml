@@ -53,6 +53,14 @@ jobs:
       - name: 🧾 Checkout repository
         uses: actions/checkout@v4
 
+      - name: ☁️ Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
+          restore-keys: |
+            Library-${{ runner.os }}-
+
       - name: 🧱 Build WebGL
         uses: game-ci/unity-builder@v4
         with:
