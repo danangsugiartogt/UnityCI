@@ -66,6 +66,7 @@ jobs:
         with:
           targetPlatform: WebGL
           unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+          buildMethod: BuildScript.BuildWebGLForCI
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
