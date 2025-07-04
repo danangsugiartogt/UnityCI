@@ -50,77 +50,77 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-      - name: 🧾 Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: ☁️ Cache Unity Library (WebGL)
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-WebGL-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
-          restore-keys: |
-            Library-WebGL-${{ runner.os }}-
+        - name: 🧾 Checkout repository
+          uses: actions/checkout@v4
+        
+        - name: ☁️ Cache Unity Library (WebGL)
+          uses: actions/cache@v4
+          with:
+            path: Library
+            key: Library-WebGL-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
+            restore-keys: |
+              Library-WebGL-${{ runner.os }}-
 
-      - name: 🧱 Build WebGL
-        uses: game-ci/unity-builder@v4
-        with:
-          targetPlatform: WebGL
-          unityVersion: ${{ needs.prepare.outputs.unityVersion }}
-          buildMethod: BuildScript.BuildWebGLForCI
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        - name: 🧱 Build WebGL
+          uses: game-ci/unity-builder@v4
+          with:
+            targetPlatform: WebGL
+            unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+            buildMethod: BuildScript.BuildWebGLForCI
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
-      - name: 📦 Upload WebGL Build
-        uses: actions/upload-artifact@v4
-        with:
-          name: WebGL-Build
-          path: build/WebGL
+        - name: 📦 Upload WebGL Build
+          uses: actions/upload-artifact@v4
+          with:
+            name: WebGL-Build
+            path: build/WebGL
 
-      - name: 🌍 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/WebGL
+        - name: 🌍 Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v4
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: build/WebGL
     android:
       name: 🌐 Build Android
       needs: webgl
       runs-on: ubuntu-latest
 
       steps:
-      - name: 🧾 Checkout repository
-        uses: actions/checkout@v4
+        - name: 🧾 Checkout repository
+          uses: actions/checkout@v4
 
-      - name: ☁️ Cache Unity Library (Android)
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-Android-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
-          restore-keys: |
-            Library-Android-${{ runner.os }}-
+        - name: ☁️ Cache Unity Library (Android)
+          uses: actions/cache@v4
+          with:
+            path: Library
+            key: Library-Android-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
+            restore-keys: |
+              Library-Android-${{ runner.os }}-
 
-      - name: 🔐 Decode Keystore
-        run: |
-          mkdir -p keystore
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/user.keystore
+        - name: 🔐 Decode Keystore
+          run: |
+            mkdir -p keystore
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/user.keystore
 
-      - name: 📦 Build Android APK
-        uses: game-ci/unity-builder@v4
-        with:
-          targetPlatform: Android
-          buildMethod: BuildScript.BuildAndroidForCI
-          unityVersion: ${{ needs.prepare.outputs.unityVersion }}
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_ALIAS_PASS: ${{ secrets.KEY_ALIAS_PASS }}
+        - name: 📦 Build Android APK
+          uses: game-ci/unity-builder@v4
+          with:
+            targetPlatform: Android
+            buildMethod: BuildScript.BuildAndroidForCI
+            unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+          env:
+            UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+            UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+            UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+            KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+            KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+            KEY_ALIAS_PASS: ${{ secrets.KEY_ALIAS_PASS }}
 
-      - name: 📤 Upload APK as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Android-APK
-          path: build/Android/Game.apk
+        - name: 📤 Upload APK as Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: Android-APK
+            path: build/Android/Game.apk
