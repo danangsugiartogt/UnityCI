@@ -111,7 +111,7 @@ jobs:
           targetPlatform: Android
           buildMethod: BuildScript.BuildAndroidForCI
           unityVersion: ${{ needs.prepare.outputs.unityVersion }}
-          customParameters: |
+          customParameters: >
             -androidKeystoreName "keystore/user.keystore"
             -androidKeystorePass "${{ secrets.KEYSTORE_PASS }}"
             -androidKeyaliasName "${{ secrets.KEY_ALIAS }}"
