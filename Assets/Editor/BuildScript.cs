@@ -30,6 +30,9 @@ public static class BuildScript
     [MenuItem("CI/Build Android CI")]
     public static void BuildAndroidForCI()
     {
+        foreach (var arg in System.Environment.GetCommandLineArgs())
+            Debug.Log("CLI ARG: " + arg);
+
         // Setup keystore for signing
         PlayerSettings.Android.useCustomKeystore = true;
         PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName");
