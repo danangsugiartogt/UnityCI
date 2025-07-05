@@ -37,6 +37,11 @@ public static class BuildScript
         PlayerSettings.Android.keyaliasName = System.Environment.GetEnvironmentVariable("KEY_ALIAS");
         PlayerSettings.Android.keyaliasPass = System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS");
 
+        Debug.Log("keystoreName:" + PlayerSettings.Android.keystoreName);
+        Debug.Log("keystorePass:" + PlayerSettings.Android.keyaliasPass);
+        Debug.Log("keyaliasName:" + PlayerSettings.Android.keyaliasName);
+        Debug.Log("keyaliasPass:" + PlayerSettings.Android.keyaliasPass);
+
         // Android min and target version
         PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel22;
         PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevel33;
