@@ -105,12 +105,6 @@ jobs:
           mkdir -p keystore
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/user.keystore
 
-      - name: 🔍 Debug secrets (temporary)
-        run: |
-          echo "KEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }}"
-          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"
-          echo "KEY_ALIAS_PASS=${{ secrets.KEY_ALIAS_PASS }}"
-
       - name: 📦 Build Android APK
         uses: game-ci/unity-builder@v4
         with:
@@ -118,17 +112,17 @@ jobs:
           buildMethod: BuildScript.BuildAndroidForCI
           unityVersion: ${{ needs.prepare.outputs.unityVersion }}
           customParameters: |
-            -androidKeystoreName keystore/user.keystore
-            -androidKeystorePass ${{ secrets.KEYSTORE_PASS }}
-            -androidKeyaliasName ${{ secrets.KEY_ALIAS }}
-            -androidKeyaliasPass ${{ secrets.KEY_ALIAS_PASS }}
+            -androidKeystoreName "keystore/user.keystore"
+            -androidKeystorePass "${{ secrets.KEYSTORE_PASS }}"
+            -androidKeyaliasName "${{ secrets.KEY_ALIAS }}"
+            -androidKeyaliasPass "${{ secrets.KEY_ALIAS_PASS }}"
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_ALIAS_PASS: ${{ secrets.KEY_ALIAS_PASS }}
+          # KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          # KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          # KEY_ALIAS_PASS: ${{ secrets.KEY_ALIAS_PASS }}
 
       - name: 📤 Upload APK as Artifact
         uses: actions/upload-artifact@v4
