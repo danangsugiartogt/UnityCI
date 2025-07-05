@@ -32,19 +32,10 @@ public static class BuildScript
     {
         // Setup keystore for signing
         PlayerSettings.Android.useCustomKeystore = true;
-        PlayerSettings.Android.keystoreName = "keystore/user.keystore"; // rel. path
-        //PlayerSettings.Android.keystorePass = System.Environment.GetEnvironmentVariable("KEYSTORE_PASS");
-        //PlayerSettings.Android.keyaliasName = System.Environment.GetEnvironmentVariable("KEY_ALIAS");
-        //PlayerSettings.Android.keyaliasPass = System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS");
-        // hardcoded data for debug
-        PlayerSettings.Android.keystorePass = "12345678";
-        PlayerSettings.Android.keyaliasName = "unity-ci";
-        PlayerSettings.Android.keyaliasPass = "12345678";
-
-        Debug.Log("keystoreName:" + PlayerSettings.Android.keystoreName);
-        Debug.Log("keystorePass:" + PlayerSettings.Android.keyaliasPass);
-        Debug.Log("keyaliasName:" + PlayerSettings.Android.keyaliasName);
-        Debug.Log("keyaliasPass:" + PlayerSettings.Android.keyaliasPass);
+        PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName");
+        PlayerSettings.Android.keystorePass = GetArg("-androidKeystorePass");
+        PlayerSettings.Android.keyaliasName = GetArg("-androidKeyaliasName");
+        PlayerSettings.Android.keyaliasPass = GetArg("-androidKeyaliasPass");
 
         // Android min and target version
         PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel22;
@@ -65,5 +56,17 @@ public static class BuildScript
         };
 
         BuildPipeline.BuildPlayer(options);
+    }
+
+    private static string GetArg(string name)
+    {
+        var args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length - 1; i++)
+        {
+            if (args[i] == name)
+                return args[i + 1];
+        }
+
+        return null;
     }
 }
