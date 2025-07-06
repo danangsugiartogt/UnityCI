@@ -35,10 +35,19 @@ public static class BuildScript
 
         // Setup keystore for signing
         PlayerSettings.Android.useCustomKeystore = true;
-        PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName")?.Trim();
-        PlayerSettings.Android.keystorePass = GetArg("-androidKeystorePass")?.Trim();
-        PlayerSettings.Android.keyaliasName = GetArg("-androidKeyaliasName")?.Trim();
-        PlayerSettings.Android.keyaliasPass = GetArg("-androidKeyaliasPass")?.Trim();
+        //PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName")?.Trim();
+        //PlayerSettings.Android.keystorePass = GetArg("-androidKeystorePass")?.Trim();
+        //PlayerSettings.Android.keyaliasName = GetArg("-androidKeyaliasName")?.Trim();
+        //PlayerSettings.Android.keyaliasPass = GetArg("-androidKeyaliasPass")?.Trim();
+
+        Debug.Log("KEYSTORE_PASS: " + System.Environment.GetEnvironmentVariable("KEYSTORE_PASS"));
+        Debug.Log("KEY_ALIAS: " + System.Environment.GetEnvironmentVariable("KEY_ALIAS"));
+        Debug.Log("KEY_ALIAS_PASS: " + System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS"));
+
+        PlayerSettings.Android.keystoreName = "keystore/user.keystore"; // rel. path
+        PlayerSettings.Android.keystorePass = System.Environment.GetEnvironmentVariable("KEYSTORE_PASS");
+        PlayerSettings.Android.keyaliasName = System.Environment.GetEnvironmentVariable("KEY_ALIAS");
+        PlayerSettings.Android.keyaliasPass = System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS");
 
         Debug.Log("keystore pass length: " + PlayerSettings.Android.keystorePass.Length);
         Debug.Log("keystore alias length: " + PlayerSettings.Android.keyaliasName.Length);
