@@ -35,19 +35,10 @@ public static class BuildScript
 
         // Setup keystore for signing
         PlayerSettings.Android.useCustomKeystore = true;
-        //PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName")?.Trim();
-        //PlayerSettings.Android.keystorePass = GetArg("-androidKeystorePass")?.Trim();
-        //PlayerSettings.Android.keyaliasName = GetArg("-androidKeyaliasName")?.Trim();
-        //PlayerSettings.Android.keyaliasPass = GetArg("-androidKeyaliasPass")?.Trim();
-
-        Debug.Log("KEYSTORE_PASS: " + System.Environment.GetEnvironmentVariable("KEYSTORE_PASS"));
-        Debug.Log("KEY_ALIAS: " + System.Environment.GetEnvironmentVariable("KEY_ALIAS"));
-        Debug.Log("KEY_ALIAS_PASS: " + System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS"));
-
-        PlayerSettings.Android.keystoreName = "keystore/user.keystore"; // rel. path
-        PlayerSettings.Android.keystorePass = System.Environment.GetEnvironmentVariable("KEYSTORE_PASS");
-        PlayerSettings.Android.keyaliasName = System.Environment.GetEnvironmentVariable("KEY_ALIAS");
-        PlayerSettings.Android.keyaliasPass = System.Environment.GetEnvironmentVariable("KEY_ALIAS_PASS");
+        PlayerSettings.Android.keystoreName = GetArg("-androidKeystoreName");
+        PlayerSettings.Android.keystorePass = GetArg("-androidKeystorePass");
+        PlayerSettings.Android.keyaliasName = GetArg("-androidKeyaliasName");
+        PlayerSettings.Android.keyaliasPass = GetArg("-androidKeyaliasPass");
 
         Debug.Log("keystore pass length: " + PlayerSettings.Android.keystorePass.Length);
         Debug.Log("keystore alias length: " + PlayerSettings.Android.keyaliasName.Length);
@@ -77,13 +68,13 @@ public static class BuildScript
     private static string GetArg(string name)
     {
         var args = System.Environment.GetCommandLineArgs();
-        for (int i = 0; i < args.Length - 1; i++)
+        foreach (var arg in args)
         {
-            if (args[i] == name)
+            if (arg.Contains(name))
             {
-                Debug.Log("GetArg Found: " + args[i]);
-                Debug.Log("GetArg Returned: " + args[i + 1]);
-                return args[i + 1];
+                var split = arg.Split('=');
+                if (split.Length == 2)
+                    return split[1];
             }
         }
 
