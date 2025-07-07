@@ -1,4 +1,4 @@
-name: Unity WebGL Build & Test
+name: UnityCI Test and Build
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
           echo "unityVersion=$version" >> $GITHUB_OUTPUT
 
   test:
-    name: 🧪 Run Tests
+    name: 🧪 Run Playmode Tests
     needs: prepare
     runs-on: ubuntu-latest
 
@@ -43,45 +43,45 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
-  # build-webgl:
-  #   name: 🌐 Build WebGL
-  #   needs: [prepare, test]
-  #   runs-on: ubuntu-latest
+  build-webgl:
+    name: 🌐 Build WebGL
+    needs: [prepare, test]
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: 🧾 Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v4
       
-  #     - name: ☁️ Cache Unity Library (WebGL)
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: Library
-  #         key: Library-WebGL-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
-  #         restore-keys: |
-  #           Library-WebGL-${{ runner.os }}-
+      - name: ☁️ Cache Unity Library (WebGL)
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ runner.os }}-${{ hashFiles('**/*.cs', '**/*.unity', '**/*.prefab') }}
+          restore-keys: |
+            Library-WebGL-${{ runner.os }}-
 
-  #     - name: 🧱 Build WebGL
-  #       uses: game-ci/unity-builder@v4
-  #       with:
-  #         targetPlatform: WebGL
-  #         unityVersion: ${{ needs.prepare.outputs.unityVersion }}
-  #         buildMethod: BuildScript.BuildWebGLForCI
-  #       env:
-  #         UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  #         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-  #         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: 🧱 Build WebGL
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: WebGL
+          unityVersion: ${{ needs.prepare.outputs.unityVersion }}
+          buildMethod: BuildScript.BuildWebGLForCI
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
 
-  #     - name: 📦 Upload WebGL Build
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: WebGL-Build
-  #         path: build/WebGL
+      - name: 📦 Upload WebGL Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: WebGL-Build
+          path: build/WebGL
 
-  #     - name: 🌍 Deploy to GitHub Pages
-  #       uses: peaceiris/actions-gh-pages@v4
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_dir: build/WebGL
+      - name: 🌍 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/WebGL
   
   build-android:
     name: 🌐 Build Android
